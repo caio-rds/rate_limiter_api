@@ -43,15 +43,10 @@ func (s *SQLite) Create(c *gin.Context) {
 	c.JSON(200, gin.H{"user_id": user.ID})
 }
 
-func (s *SQLite) Read(c *gin.Context) {
-	userId := c.Param("id")
-	if userId == "" {
-		c.JSON(400, gin.H{"error": "User ID is required"})
-		return
-	}
+func (s *SQLite) Read(c *gin.Context, UserId uint) {
 
 	var user *schemas.User
-	if err := s.DB.First(&user, userId).Error; err != nil {
+	if err := s.DB.First(&user, UserId).Error; err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
@@ -68,7 +63,7 @@ func (s *SQLite) Read(c *gin.Context) {
 	c.JSON(200, &response)
 }
 
-func (s *SQLite) Update(c *gin.Context) {
+func (s *SQLite) Update(c *gin.Context, UserId uint) {
 	var user *schemas.User
 	var updateUser RequestUpdateUser
 	if err := c.BindJSON(&updateUser); err != nil {
@@ -76,13 +71,7 @@ func (s *SQLite) Update(c *gin.Context) {
 		return
 	}
 
-	userId := c.Param("id")
-	if userId == "" {
-		c.JSON(400, gin.H{"error": "User ID is required"})
-		return
-	}
-
-	if err := s.DB.First(&user, userId).Error; err != nil {
+	if err := s.DB.First(&user, UserId).Error; err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
@@ -112,15 +101,10 @@ func (s *SQLite) Update(c *gin.Context) {
 	c.JSON(200, gin.H{"message": "User updated successfully"})
 }
 
-func (s *SQLite) Delete(c *gin.Context) {
-	userId := c.Param("id")
-	if userId == "" {
-		c.JSON(400, gin.H{"error": "User ID is required"})
-		return
-	}
+func (s *SQLite) Delete(c *gin.Context, UserId uint) {
 
 	var user *schemas.User
-	if err := s.DB.First(&user, userId).Error; err != nil {
+	if err := s.DB.First(&user, UserId).Error; err != nil {
 		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
