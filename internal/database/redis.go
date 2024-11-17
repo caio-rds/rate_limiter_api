@@ -3,14 +3,13 @@ package database
 import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	"os"
 )
-
-// var url = "redis://default:2Mk032uWxN5C9kTcpl48ZNgBVnreQqex@redis-10367.c15.us-east-1-2.ec2.redns.redis-cloud.com:10367"
 
 func ConnectRedis() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     "redis-10367.c15.us-east-1-2.ec2.redns.redis-cloud.com:10367",
-		Password: "2Mk032uWxN5C9kTcpl48ZNgBVnreQqex",
+		Addr:     os.Getenv("REDIS_ADDR"),
+		Password: os.Getenv("REDIS_PASSWORD"),
 	})
 
 	_, err := rdb.Ping(rdb.Context()).Result()
